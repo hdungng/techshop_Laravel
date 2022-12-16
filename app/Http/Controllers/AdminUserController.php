@@ -144,11 +144,11 @@ class AdminUserController extends Controller
 
     function delete($id)
     {
-        if (Auth::id() != $id) {
+        if (session('user_id') == $id) {
+            return redirect('admin/user/list', 'status', 'Bạn không thể xóa tài khoản của bạn ra khỏi hệ thống');
+        } else {
             User::find($id)->delete();
             return redirect('admin/user/list', 'status', 'Đã xóa thành viên thành công');
-        } else {
-            return redirect('admin/user/list', 'status', 'Bạn không thể xóa tài khoản của bạn ra khỏi hệ thống');
         }
     }
 

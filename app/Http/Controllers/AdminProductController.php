@@ -11,7 +11,7 @@ class AdminProductController extends Controller
 {
     //
     
-    function list(Request $request)
+    function list()
     {   
         $products = Product::select('products.*', 
         'product_cats.name AS cat_name')
@@ -94,8 +94,8 @@ class AdminProductController extends Controller
             ->join('product_brands', 'products.brand_id', '=', 'product_brands.id')
             ->find($id);
 
-        $list_brands = ProductBrand::where('status', '=', 'Active')->get()->pluck('name', 'id');
-        $list_cats = ProductCat::where('status', '=', 'Active')->get()->pluck('name', 'id');
+        $list_brands = ProductBrand::where('status', '=', 'Active')->get();
+        $list_cats = ProductCat::where('status', '=', 'Active')->get();
         return view('admin.product.update', compact('product', 'list_brands', 'list_cats'));
     }
 
