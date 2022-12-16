@@ -50,20 +50,28 @@
                 </ul>
                 <ul class="header-links pull-right">
                     <li><a href="{{ url('admin') }}">
-                            @if (Auth::user())
+                            @if (Session::has('user_id'))
                             @else
                                 <i class="fa fa-id-card"></i>Admin
                             @endif
                         </a></li>
-                    <li><a href="{{ url('admin') }}"><i class="fa fa-user-o"></i>
-                            @if (Auth::user())
-                                Xin chào {{ Auth::user()->name }}
-                    <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                    <li><a href="{{ url('admin')}}"><i class="fa fa-user-o"></i>
+                            @if (Session::has('user_id'))
+                                Xin chào {{ session('user_name') }}
+                                {{-- <li><a href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
 
-                            document.getElementById('logout-form').submit();">Đăng xuất</a></li>
+                            document.getElementById('logout-form').submit();">Đăng
+                            xuất</a></li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
-                    </form>
+                    </form> --}}
+                    <li><a href="@if (session('user_role') == 1)
+                        {{ route('dashboard')  }}
+                    @else
+                        {{ route('profile', session('user_id'))  }}
+                    @endif">Your Profile</a></li>
+                    <li><a href="{{ route('logout') }}">Đăng xuất</a></li>
                 @else
                     Đăng nhập
                     @endif
@@ -201,6 +209,43 @@
 
     @yield('content')
 
+    <!-- NEWSLETTER -->
+    <div id="newsletter" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="newsletter">
+                        <p>Đăng ký để nhận thông tin <strong>MỚI NHẤT</strong></p>
+                        <form>
+                            <input class="input" type="email" placeholder="Nhập email của bạn tại đây">
+                            <button class="newsletter-btn"><i class="fa fa-envelope"></i> Đăng ký</button>
+                        </form>
+                        <ul class="newsletter-follow">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /NEWSLETTER -->
+
+    
     <!-- FOOTER -->
     <footer id="footer">
         <!-- top footer -->

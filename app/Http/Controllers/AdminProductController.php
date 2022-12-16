@@ -10,26 +10,13 @@ use Illuminate\Http\Request;
 class AdminProductController extends Controller
 {
     //
-    function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            session(['module_active' => 'product']);
-
-            return $next($request);
-        });
-    }
+    
     function list(Request $request)
-    {
-        $keyword = '';
-
-        if($request->input('keyword')) {
-            $keyword = $request->input('keyword');
-        }
-        $products = Product::select('products.*', 'product_cats.name AS cat_name', 'product_brands.name AS brand_name')
+    {   
+        $products = Product::select('products.*', 
+        'product_cats.name AS cat_name')
             ->join('product_cats', 'products.cat_id', '=', 'product_cats.id')
-            ->join('product_brands', 'products.brand_id', '=', 'product_brands.id')
             ->orderBy('created_at', 'desc')
-            ->where('products.name', 'LIKE', "%{$keyword}%")
             ->paginate(10);
         return view('admin.product.list', compact('products'));
     }
@@ -90,6 +77,7 @@ class AdminProductController extends Controller
             'quantity' => $request->input('quantity'),
             'status' => 'Pending'
         ]);
+        
         return redirect()->route('list_product')->with('status', 'Thêm sản phẩm thành công!');
     }
 
@@ -143,6 +131,7 @@ class AdminProductController extends Controller
         $input = $request->except('_token');
 
 
+        // NẾU CÓ THAY ĐỔI ẢNH 
         if ($request->hasFile('thumbnail')) {
             $thumbnail_file = $request->file('thumbnail');
 
@@ -153,9 +142,10 @@ class AdminProductController extends Controller
             $thumbnail_file->move('uploads', $thumbnail_file_name);
             $thumbnail = "uploads/" . $thumbnail_file_name;
 
-            $input['thumbnail'] = $thumbnail;
-        }
 
+            // BỎ CÁI BIẾN $THUMBNAIL VÀO MẢNG INPUT
+            $input['thumbnail'] = $thumbnail;    
+        }
 
         Product::where('id', $id)->update($input);
 

@@ -10,7 +10,7 @@ class AdminProductCatController extends Controller
     //
     function list()
     {
-        $product_cats = ProductCat::simplePaginate(5);
+        $product_cats = ProductCat::paginate(5);
         return view('admin.product.cat_list', compact('product_cats'));
     }
 

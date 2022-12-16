@@ -10,7 +10,7 @@ class AdminProductBrandController extends Controller
     //
     function list()
     {
-        $product_brands = ProductBrand::simplePaginate(5);
+        $product_brands = ProductBrand::paginate(5);
         return view('admin.product.brand_list', compact('product_brands'));
     }
 

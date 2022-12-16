@@ -11,42 +11,15 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserController extends Controller
 {
     //
-    function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            session(['module_active' => 'user']);
-
-            return $next($request);
-        });
-    }
 
     function list(Request $request)
     {
-        $status = $request->input('status');
 
-        $list_act = [
-            'delete' => 'Vô hiệu hóa'
-        ];
+        $users = User::select('users.*', 'roles.name AS role_name')
+        ->join('roles', 'users.role', 'roles.id')->paginate(10);
 
-        if ($status == 'trash') {
-            $users = User::onlyTrashed()->paginate(10);
-            $list_act = [
-                'restore' => 'Khôi phục',
-                'forceDelete' => 'Xóa vĩnh viễn'
-            ];
-        } else {
-            $keyword = '';
-            if ($request->input('keyword')) {
-                $keyword = $request->input('keyword');
-            }
-            $users = User::where('name', 'LIKE', "%{$keyword}%")->paginate(10);
-        }
-        $count_user_active = User::count();
-        $count_user_trash = User::onlyTrashed()->count();
 
-        $count = [$count_user_active, $count_user_trash];
-
-        return view('admin.user.list', compact('users', 'count', 'list_act'));
+        return view('admin.user.list', compact('users'));
     }
 
 
@@ -179,38 +152,4 @@ class AdminUserController extends Controller
         }
     }
 
-    function action(Request $request)
-    {
-        $list_check = $request->input('list_check');
-
-        if ($list_check) {
-            // kiểm tra xem thành viên là TÀI KHOẢN CỦA MÌNH => KHÔNG THỂ BỊ THAO TÁC
-            foreach ($list_check as $key => $id) {
-                if (Auth::id() == $id) {
-                    unset($list_check[$key]);
-                }
-            }
-
-            // kiểm tra xem danh sách sau khi loại tài khoản mình ra CÒN THÀNH VIÊN nào nữa ko => THAO TÁC
-            if (!empty($list_check)) {
-                $act = $request->input('act');
-                if ($act == 'delete') {
-                    // Xóa tạm thời
-                    User::destroy($list_check);
-                    return redirect('admin/user/list', 'status', 'Bạn đã vô hiệu hóa thành công');
-                } else if ($act == 'restore') {
-                    // khôi phục
-                    User::withTrashed()->whereIn('id', $list_check)->restore();
-                    return redirect('admin/user/list', 'status', 'Bạn đã khôi phục thành công');
-                } else if ($act == 'forceDelete') {
-                    // xóa vĩnh viễn
-                    User::withTrashed()->whereIn('id', $list_check)->forceDelete();
-                    return redirect('admin/user/list', 'status', 'Bạn đã xóa vĩnh viễn người dùng thành công');
-                }
-            }
-            return redirect('admin/user/list', 'status', 'Bạn không thể thao tác trên tài khoản của bạn');
-        } else {
-            return redirect('admin/user/list', 'status', 'Bạn cần phải chọn thành viên để thao tác');
-        }
-    }
 }

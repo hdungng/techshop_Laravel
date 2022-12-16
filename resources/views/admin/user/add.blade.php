@@ -46,9 +46,9 @@
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="password-confirm">Password Confimred</label>
-                            <input class="form-control" type="password" name="password-confirm" id="password-confirm">
-                            @error('password-cofirm')
+                            <label for="password_confirmation">Password Confimred</label>
+                            <input class="form-control" type="password" name="password_confirmation" id="password_confirmation">
+                            @error('password_confirmation')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>

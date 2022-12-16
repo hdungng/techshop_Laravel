@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 
-class AdminAuthenticate
+class AuthCheck
 {
     /**
      * Handle an incoming request.
@@ -18,14 +17,10 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Session::has('user_id')) {
-            
-            if (session('user_role') == 1) {
-                return $next($request);
-            } else {
-                return redirect('/');
-            }
+        if(Session::has('user_id')) {
+            return $next($request);
         }
-        return $next($request);
+        return redirect()->route('login');
+        
     }
 }

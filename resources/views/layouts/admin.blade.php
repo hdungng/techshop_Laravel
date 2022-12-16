@@ -89,14 +89,14 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="{{ url(Auth::user()->thumbnail) }}" alt=""
+                        <img class="rounded-circle" src="{{ url(session('user_thumbnail')) }}" alt="" 
                             style="width: 40px; height: 40px;">
                         <div
                             class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
                         </div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">{{ Auth::user()->name }}</h6>
+                        <h6 class="mb-0">{{ session('user_name') }}</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -125,15 +125,6 @@
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="{{ route('list_user') }}" class="dropdown-item">List User</a>
                             <a href="{{ route('add_user_show') }}" class="dropdown-item">Add User</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#"
-                            class="nav-link dropdown-toggle {{ $module_active == 'order' ? 'active' : '' }}"
-                            data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Order</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item"></a>
-                            <a href="signup.html" class="dropdown-item">List Order</a>
                         </div>
                     </div>
                 </div>
@@ -167,7 +158,7 @@
                                     <img class="rounded-circle" src="img/user.jpg" alt=""
                                         style="width: 40px; height: 40px;">
                                     <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">{{ Auth::user()->name }} send you a message</h6>
+                                        <h6 class="fw-normal mb-0">{{ session('name') }} send you a message</h6>
                                         <small>15 minutes ago</small>
                                     </div>
                                 </div>
@@ -202,21 +193,24 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{{ url(Auth::user()->thumbnail) }}"
+                            <img class="rounded-circle me-lg-2" src="{{ url(session('user_thumbnail')) }}"
                                 alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
+                            <span class="d-none d-lg-inline-flex">{{ session('user_name') }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="{{ route('edit_user', Auth::user()->id) }}" class="dropdown-item">My Profile</a>
+                            <a href="{{ route('edit_user', session('user_id')) }}" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="{{ route('logout') }}" class="dropdown-item"
+                            {{-- <a href="{{ route('logout') }}" class="dropdown-item"
                                 onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
-                            </form>
+                            </form> --}}
+                            <a href="{{ route('logout') }}" class="dropdown-item">
+                                {{ __('Logout') }}
+                            </a>
                         </div>
                     </div>
                 </div>

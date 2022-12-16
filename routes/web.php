@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProductCatController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 /*
@@ -26,10 +27,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('admin', [HomeController::class, 'index']);
 
-Auth::routes(['verify' => true]);
 
-Route::middleware('auth', 'admin.auth')->group(function () {
-    
+Route::controller(AuthController::class)->group(function () {
+    Route::get('login', 'login')->name('login');
+    Route::get('logout', 'logout')->name('logout');
+    Route::get('register', 'register')->name('register');
+
+
+    Route::post('loginUser', 'loginUser')->name('loginUser');
+    Route::post('registerUser', 'registerUser')->name('registerUser');
+});
+
+
+
+Route::middleware('check.auth', 'admin.auth')->group(function () {
+
     Route::controller(DashboardController::class)->group(function () {
         Route::get('dashboard', 'show')->name('dashboard');
 
@@ -82,7 +94,7 @@ Route::middleware('auth', 'admin.auth')->group(function () {
         Route::get('admin/product_brand/list', 'list')->name('list_product_brand');
         Route::get('admin/product_brand/delete/{id}', 'delete')->name('delete_product_brand');
         Route::get('admin/product_brand/update/{id}', 'update')->name('update_product_brand');
-        
+
         Route::post('admin/product_brand/store/{id}', 'store')->name('store_product_brand');
         Route::post('admin/product_brand/create', 'create')->name('create_product_brand');
     });
@@ -95,5 +107,4 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 Route::get('/', [MainPageController::class, 'index'])->name('home_page');
 Route::get('/category/{name}', [ProductCatController::class, 'index'])->name('category');
 Route::get('/detail/{id}', [ProductController::class, 'index'])->name('detail');
-
-
+Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');

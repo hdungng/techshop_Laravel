@@ -48,7 +48,7 @@
                                             <th scope="row">{{ $t }}</th>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->role }}</td>
+                                            <td>{{ $user->role_name }}</td>
                                             <td>{{ $user->created_at }}</td>
                                             <td>
                                                 <a href="{{ route('edit_user', $user->id) }}"
@@ -56,7 +56,7 @@
                                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
                                                         class="fa fa-edit"></i></a>
                                                 @if (Auth::id() != $user->id)
-                                                    <a href="{{ route('delete_user') }}"
+                                                    <a href="{{ route('delete_user', $user->id) }}"
                                                         onclick="return confirm('Bạn có chắc chắn muốn xóa bản ghi này')"
                                                         class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                                         data-toggle="tooltip" data-placement="top" title="Delete"><i
