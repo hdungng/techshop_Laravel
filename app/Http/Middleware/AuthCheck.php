@@ -17,7 +17,10 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Session::has('user_id')) {
+        if(Session::has('admin_id')) {
+            return $next($request);
+        }
+        if(Session::has('customer_id')) {
             return $next($request);
         }
         return redirect()->route('login');

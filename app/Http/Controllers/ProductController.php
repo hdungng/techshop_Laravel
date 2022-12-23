@@ -12,15 +12,20 @@ class ProductController extends Controller
     //
     function index($id)
     {
-        $product_cats = ProductCat::get();
-
-        $images = ImageProduct::select('image_products.*', 'products.name')
-            ->join('products', 'image_products.product_id', 'products.id')->where('product_id', '=', $id)->first();
+        $product_cats = ProductCat::where('status', '=', 'Active')->get();
+        $product_brands = ProductCat::where('status', '=', 'Active')->get();
 
         $product = Product::select('products.*', 'product_cats.name AS cat_name')
             ->join('product_cats', 'products.cat_id', 'product_cats.id')
-            ->where('products.id', '=', $id)->first();
+            ->where([
+                ['products.id', '=', $id],
+                ['products.status', '=', 'Active'],
+            ])->first();
 
-        return view('customer.product.detail', compact('product', 'product_cats', 'images'));
+            if($product == null) {
+                return redirect()->route('home_page');
+            }
+
+        return view('customer.product.detail', compact('product', 'product_cats', 'product_brands'));
     }
 }

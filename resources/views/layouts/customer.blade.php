@@ -49,15 +49,19 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i> Greenwich Viet Nam</a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a href="{{ url('admin') }}">
-                            @if (Session::has('user_id'))
+                    <li><a href="{{ url('login') }}">
+                            @if (Session::has('customer_id'))
                             @else
                                 <i class="fa fa-id-card"></i>Admin
                             @endif
                         </a></li>
-                    <li><a href="{{ url('admin')}}"><i class="fa fa-user-o"></i>
-                            @if (Session::has('user_id'))
-                                Xin chào {{ session('user_name') }}
+                    <li><a
+                            href="@if (Session::has('customer_id')) {{ route('profile', session('customer_id')) }}
+                    @else
+                        {{ route('login') }} @endif"><i
+                                class="fa fa-user-o"></i>
+                            @if (Session::has('customer_id'))
+                                Xin chào {{ session('customer_name') }}
                                 {{-- <li><a href="{{ route('logout') }}"
                             onclick="event.preventDefault();
 
@@ -66,11 +70,11 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form> --}}
-                    <li><a href="@if (session('user_role') == 1)
-                        {{ route('dashboard')  }}
+                    <li><a
+                            href="@if (session('user_role') == 1) {{ route('dashboard') }}
                     @else
-                        {{ route('profile', session('user_id'))  }}
-                    @endif">Your Profile</a></li>
+                        {{ route('profile', session('customer_id')) }} @endif">Your
+                            Profile</a></li>
                     <li><a href="{{ route('logout') }}">Đăng xuất</a></li>
                 @else
                     Đăng nhập
@@ -198,14 +202,23 @@
                     @foreach ($product_cats as $cat)
                         <li><a href="{{ route('category', $cat->name) }}">{{ $cat->name }}</a></li>
                     @endforeach
+
+                    <li class="dropdown" style="cursor: pointer;">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Brand
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @foreach ($product_brands as $brand)
+                                <li><a class="dropdown-item"
+                                        href="{{ route('brand', $brand->name) }}">{{ $brand->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
                 </ul>
-                <!-- /NAV -->
             </div>
-            <!-- /responsive-nav -->
         </div>
         <!-- /container -->
     </nav>
-    <!-- /NAVIGATION -->
+
 
     @yield('content')
 
@@ -245,7 +258,7 @@
     </div>
     <!-- /NEWSLETTER -->
 
-    
+
     <!-- FOOTER -->
     <footer id="footer">
         <!-- top footer -->

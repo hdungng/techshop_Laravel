@@ -10,11 +10,13 @@ use Illuminate\Http\Request;
 class AdminProductController extends Controller
 {
     //
-    
+
     function list()
-    {   
-        $products = Product::select('products.*', 
-        'product_cats.name AS cat_name')
+    {
+        $products = Product::select(
+            'products.*',
+            'product_cats.name AS cat_name'
+        )
             ->join('product_cats', 'products.cat_id', '=', 'product_cats.id')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -31,11 +33,11 @@ class AdminProductController extends Controller
     function create(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:100|min:5',
+            'name' => 'required|max:100|min:5|unique:products',
             'description' => 'required',
             'detail' => 'required',
-            'cat_id' => 'required',
-            'brand_id' => 'required',
+            'cat_id' => 'required|not_in:Chọn danh mục',
+            'brand_id' => 'required|not_in:Chọn hãng',
             'price' => 'required|integer|min:0',
             'quantity' => 'required|integer|min:0',
             'thumbnail' => 'required|image|mimes:png,jpg,jpeg|max:2048'
@@ -43,7 +45,10 @@ class AdminProductController extends Controller
             'required' => ":attribute không được để trống",
             'min' => ":attribute phải có độ dài ít nhất :min kí tự",
             'max' => ":attribute phải có độ dài ít nhất :max kí tự",
-            'image' => ":attribute phải là file ảnh có định dạng jpeg, png, bmp, gif"
+            'image' => ":attribute phải là file ảnh có định dạng jpeg, png, bmp, gif",
+            'integer' => ":attribute không đúng định dạng số",
+            'unique' => ":attribute đã tồn tại",
+            'not_in' => "Vui lòng chọn :attribute",
         ], [
             'name' => 'Tên sản phẩm',
             'description' => 'Mô tả sản phẩm',
@@ -61,23 +66,33 @@ class AdminProductController extends Controller
             // LẤY TÊN FILE
             $thumbnail_file_name = $thumbnail_file->getClientOriginalName();
 
-            // UPLOAD FILE
-            $thumbnail_file->move('uploads', $thumbnail_file_name);
             $thumbnail = "uploads/" . $thumbnail_file_name;
+
+            $thumbnail_check = Product::where('thumbnail', '=', $thumbnail)->first();
+
+
+            if ($thumbnail_check == null) {
+                // UPLOAD FILE
+                $thumbnail_file->move('uploads', $thumbnail_file_name);
+            } else {
+                return redirect()->route('add_product')
+                ->with('status-danger', 'Ảnh này đang là ảnh đại diện của sản phẩm khác! Vui lòng chọn ảnh khác')
+                ->withInput($request->except('_token'));
+            }
         }
 
         Product::create([
-            'name' => $request->input('name'),
+            'name' => $request->name,
             'thumbnail' => $thumbnail,
-            'description' => $request->input('description'),
-            'detail' => $request->input('detail'),
-            'cat_id' => $request->input('cat_id'),
-            'brand_id' => $request->input('brand_id'),
-            'price' => $request->input('price'),
-            'quantity' => $request->input('quantity'),
+            'description' => $request->description,
+            'detail' => $request->detail,
+            'cat_id' => $request->cat_id,
+            'brand_id' => $request->brand_id,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
             'status' => 'Pending'
         ]);
-        
+
         return redirect()->route('list_product')->with('status', 'Thêm sản phẩm thành công!');
     }
 
@@ -106,16 +121,18 @@ class AdminProductController extends Controller
             'name' => 'required|max:100|min:5',
             'description' => 'required',
             'detail' => 'required',
-            'cat_id' => 'required',
-            'brand_id' => 'required',
+            'cat_id' => 'required|not_in:Chọn danh mục',
+            'brand_id' => 'required|not_in:Chọn hãng',
             'price' => 'required|integer|min:0',
             'quantity' => 'required|integer|min:0',
             'thumbnail' => 'image|mimes:png,jpg,jpeg|max:2048',
         ], [
+            'integer' => ":attribute không đúng định dạng số",
             'required' => ":attribute không được để trống",
             'min' => ":attribute phải có độ dài ít nhất :min kí tự",
             'max' => ":attribute phải có độ dài ít nhất :max kí tự",
-            'image' => ":attribute phải là file ảnh có định dạng jpeg, png, bmp, gif"
+            'image' => ":attribute phải là file ảnh có định dạng jpeg, png, bmp, gif",
+            'not_in' => "Vui lòng chọn :attribute",
         ], [
             'id' => 'ID',
             'name' => 'Tên sản phẩm',
@@ -138,14 +155,24 @@ class AdminProductController extends Controller
             // LẤY TÊN FILE
             $thumbnail_file_name = $thumbnail_file->getClientOriginalName();
 
-            // UPLOAD FILE
-            $thumbnail_file->move('uploads', $thumbnail_file_name);
             $thumbnail = "uploads/" . $thumbnail_file_name;
 
+            $thumbnail_check = Product::where([
+                ['thumbnail', '=', $thumbnail],
+                ['id', '=', $id],
+            ])->first();
 
-            // BỎ CÁI BIẾN $THUMBNAIL VÀO MẢNG INPUT
-            $input['thumbnail'] = $thumbnail;    
+
+            if ($thumbnail_check == null) {
+                // UPLOAD FILE
+                $thumbnail_file->move('uploads', $thumbnail_file_name);
+                // BỎ CÁI BIẾN $THUMBNAIL VÀO MẢNG INPUT
+                $input['thumbnail'] = $thumbnail;
+            } else {
+                return redirect()->route('update_product', $id)->with('status-danger', 'Ảnh này đang là ảnh đại diện của sản phẩm này! Vui lòng chọn ảnh khác');
+            }
         }
+
 
         Product::where('id', $id)->update($input);
 

@@ -13,7 +13,7 @@ class AdminImageProductController extends Controller
     function add($id)
     {
         $product = Product::find($id);
-        return view('admin.product.add_images', compact('product'));
+        return view('admin.images.add', compact('product'));
     }
 
     function create(Request $request)
@@ -64,7 +64,7 @@ class AdminImageProductController extends Controller
         if(empty($images)) {
             return redirect()->route('add_image_product', $id);
         }    
-        return view('admin.product.update_images', compact('images'));
+        return view('admin.images.update', compact('images'));
     }
 
     function store(Request $request, $id)

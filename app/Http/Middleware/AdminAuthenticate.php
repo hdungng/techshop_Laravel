@@ -18,9 +18,9 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Session::has('user_id')) {
+        if (Session::has('admin_id')) {
             
-            if (session('user_role') == 1) {
+            if (session('admin_role')) {
                 return $next($request);
             } else {
                 return redirect('/');

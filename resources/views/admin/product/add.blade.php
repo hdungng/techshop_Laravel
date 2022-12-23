@@ -4,9 +4,9 @@
     <div id="content" class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-12">
-                @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
+                @if (session('status-danger'))
+                    <div class="alert alert-danger">
+                        {{ session('status-danger') }}
                     </div>
                 @endif
                 <div class="bg-light rounded h-100 p-4">
@@ -17,7 +17,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="name">Tên sản phẩm</label>
-                                    <input class="form-control" type="text" name="name" id="name">
+                                    <input class="form-control" type="text" name="name" id="name" value="{{ old('name')}}">
                                     @error('name')
                                         <small class="form-text text-danger">{{ $message }}</small>
                                     @enderror
@@ -34,7 +34,7 @@
                                 <br>
                                 <div class="form-group">
                                     <label for="price">Giá</label>
-                                    <input class="form-control" type="text" name="price" id="price">
+                                    <input class="form-control" type="text" name="price" id="price" value="{{ old('price')}}">
                                     @error('price')
                                         <small class="form-text text-danger">{{ $message }}</small>
                                     @enderror
@@ -44,7 +44,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="description">Mô tả sản phẩm</label>
-                                    <textarea name="description" class="form-control" id="intro" cols="30" rows="10"></textarea>
+                                    <textarea name="description" class="form-control" id="intro" cols="30" rows="10">{{ old('description') }}</textarea>
                                     @error('description')
                                         <small class="form-text text-danger">{{ $message }}</small>
                                     @enderror
@@ -56,7 +56,7 @@
 
                         <div class="form-group">
                             <label for="detail">Chi tiết sản phẩm</label>
-                            <textarea name="detail" class="form-control main_content" id="intro" cols="50" rows="10"></textarea>
+                            <textarea name="detail" class="form-control main_content" id="intro" cols="50" rows="10">{{ old('detail') }}</textarea>
                             @error('detail')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -93,7 +93,7 @@
 
                         <div class="form-group">
                             <label for="quantity">Số lượng</label>
-                            <input class="form-control" type="text" name="quantity" id="quantity">
+                            <input class="form-control" type="text" name="quantity" id="quantity" value="{{ old('quantity')}}">
                             @error('quantity')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror

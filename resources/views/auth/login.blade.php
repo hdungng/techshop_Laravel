@@ -32,6 +32,17 @@
 </head>
 
 <body>
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('status-danger'))
+        <div class="alert alert-danger">
+            {{ session('status-danger') }}
+        </div>
+    @endif
     <div class="container-xxl position-relative bg-white d-flex p-0">
 
         <!-- Sign In Start -->
@@ -41,7 +52,8 @@
                     <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
                         <form method="POST" action="{{ route('loginUser') }}">
                             @csrf
-                            <h3 class="text-primary d-flex align-items-center justify-content-center mb-3">ĐĂNG NHẬP</h3>
+                            <h3 class="text-primary d-flex align-items-center justify-content-center mb-3">ĐĂNG NHẬP
+                            </h3>
 
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
@@ -76,7 +88,8 @@
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">
                                 Đăng nhập
                             </button>
-                            <p class="text-center mb-0">Trở thành khách hàng của chúng tôi? <a href="{{ route('register') }}">Đăng ký</a></p>
+                            <p class="text-center mb-0">Trở thành khách hàng của chúng tôi? <a
+                                    href="{{ route('register') }}">Đăng ký</a></p>
                             <br>
                             <a href="{{ route('home_page') }}">Quay lại trang chủ</a>
                         </form>

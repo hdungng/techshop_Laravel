@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-12">
@@ -42,10 +47,10 @@
                                             <td><span class="{{ $font }}">{{ $product->status }}</span></td>
                                             <td>{{ $product->quantity }}</td>
                                             <td>
-                                                <a href="{{ route('update_image_product', $product->id) }}"
+                                                <a href="{{ route('update_product', $product->id) }}"
                                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                                        class="fa fa-file-image"></i></a>
+                                                        class="fa fa-edit"></i></a>
                                                 <a href="{{ route('delete_product', $product->id) }}"
                                                     class="btn btn-danger btn-sm rounded-0 text-white"
                                                     onclick="return confirm('Bạn có chắc chắn muốn xóa bản ghi này')"

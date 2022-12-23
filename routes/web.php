@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProductCatController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -49,12 +50,16 @@ Route::middleware('check.auth', 'admin.auth')->group(function () {
     });
 
     Route::controller(AdminUserController::class)->group(function () {
-        Route::get('admin/user/list', 'list')->name('list_user');
+        Route::get('admin/user/list-admin', 'listAdmin')->name('list_admin');
+        Route::get('admin/user/list-customer', 'listCustomer')->name('list_customer');
         Route::get('admin/user/add', 'add')->name('add_user_show');
-        Route::get('admin/user/delete/{id}', 'delete')->name('delete_user');
+        Route::get('admin/user/delete-admin/{id}', 'deleteAdmin')->name('delete_admin');
+        Route::get('admin/user/delete-user/{id}', 'deleteCustomer')->name('delete_customer');
         Route::get('admin/user/edit/{id}', 'edit')->name('edit_user');
+        Route::get('admin/user/reset-password/{id}', 'resetPassword')->name('reset-admin-password');
 
 
+        Route::post('admin/user/reset/{id}', 'reset');
         Route::post('admin/user/update/{id}', 'update')->name('update_user');
         Route::post('admin/user/action', 'action')->name('action_user');
         Route::post('admin/user/store', 'store')->name('add_user');
@@ -106,5 +111,12 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 
 Route::get('/', [MainPageController::class, 'index'])->name('home_page');
 Route::get('/category/{name}', [ProductCatController::class, 'index'])->name('category');
+Route::get('/brand/{name}', [ProductBrandController::class, 'index'])->name('brand');
+
 Route::get('/detail/{id}', [ProductController::class, 'index'])->name('detail');
+
 Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
+Route::get('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('reset-password');
+
+Route::post('/update-profile/{id}', [UserController::class, 'update'])->name('update-profile');
+Route::post('/reset/{id}', [UserController::class, 'reset'])->name('reset');

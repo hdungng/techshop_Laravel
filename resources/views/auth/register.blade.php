@@ -82,11 +82,17 @@
                                     autocomplete="password_confirmation" name="password_confirmation"
                                     placeholder="Confrm Password">
                                 <label for="password_confirmation">Xác nhận mật khẩu</label>
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
 
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Đăng ký</button>
-                            <p class="text-center mb-0">Đã có tài khoản? <a href="{{ route('login') }}">Đăng nhập</a></p>
+                            <p class="text-center mb-0">Đã có tài khoản? <a href="{{ route('login') }}">Đăng nhập</a>
+                            </p>
                         </form>
                     </div>
                 </div>

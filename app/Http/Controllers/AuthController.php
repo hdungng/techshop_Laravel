@@ -16,15 +16,17 @@ class AuthController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function login() {
+    public function login()
+    {
         return view('auth.login');
     }
 
-    public function loginUser(Request $request) {
+    public function loginUser(Request $request)
+    {
 
         $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8'],
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
         ], [
             'required' => ":attribute không được để trống",
             'min' => ":attribute phải có độ dài ít nhất :min kí tự",
@@ -37,55 +39,77 @@ class AuthController extends Controller
 
         $user = User::where('email', '=', $request->email)->first();
 
-        if($user) {
+        if ($user) {
 
-
-            if(Hash::check($request->password, $user->password)) {
-                $request->session()->put('user_id', $user->id);
-                $request->session()->put('user_name', $user->name);
-                $request->session()->put('user_thumbnail', $user->thumbnail);
+            if (Hash::check($request->password, $user->password)) {
                 $request->session()->put('user_role', $user->role);
-                
 
+                if (session('user_role') == 1) {
+                    $request->session()->put('admin_id', $user->id);
+                    $request->session()->put('admin_name', $user->name);
+                    $request->session()->put('admin_thumbnail', $user->thumbnail);
+                    $request->session()->put('admin_role', $user->role);
 
-                if(session('user_role') == 1) {
                     return redirect()->route('dashboard');
+                    
                 } else {
+                    $request->session()->put('customer_id', $user->id);
+                    $request->session()->put('customer_name', $user->name);
+                    $request->session()->put('customer_thumbnail', $user->thumbnail);
+                    $request->session()->put('customer_role', $user->role);
+
                     return redirect()->route('home_page');
                 }
+            } else {
+                return redirect()->route('login')->with('status-danger', 'Mật khẩu của bạn không chính xác');
             }
+        } else {
+            return redirect()->route('login')->with('status-danger', 'Email của bạn chưa được đăng ký');
         }
     }
 
-    public function logout() {
-        if(Session::has('user_id')) {
+    public function logout()
+    {
+        if (Session::has('admin_id') || Session::has('customer_id')) {
 
-            Session::pull('user_id');
-            Session::pull('user_name');
-            Session::pull('user_thumbnail');
-            Session::pull('user_role');
+            if(session('user_role') == 1) {
+                Session::pull('user_role');
+                Session::pull('admin_role');
+                Session::pull('admin_name');
+                Session::pull('admin_thumbnail');
+                Session::pull('admin_role');
+            } else {
+                Session::pull('user_role');
+                Session::pull('customer_id');
+                Session::pull('customer_name');
+                Session::pull('customer_thumbnail');
+                Session::pull('customer_role');
+            }
 
             return redirect()->route('login');
         }
     }
 
 
-    public function register() {
+    public function register()
+    {
         return view('auth.register');
     }
 
-    public function registerUser(Request $request) {
-        
+    public function registerUser(Request $request)
+    {
+
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => 'required|string|max:255|min:10',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ], [
             'required' => ":attribute không được để trống",
             'min' => ":attribute phải có độ dài ít nhất :min kí tự",
             'max' => ":attribute phải có độ dài tối đa :max kí tự",
             'email' => ":attribute chưa đúng định dạng",
             'unique' => ":attribute đã tồn tại",
+            'confirmed' => ":attribute phải trùng khớp nhau",
         ], [
             'name' => "Tên người dùng",
             'email' => "Email",
@@ -96,10 +120,9 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 2,
+            'role' => 2, //Customer,
         ]);
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('status', 'Đăng ký tài khoản thành công');
     }
-
 }

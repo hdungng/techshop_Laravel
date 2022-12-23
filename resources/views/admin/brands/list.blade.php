@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+    @if (session('status-danger'))
+        <div class="alert alert-danger">
+            {{ session('status-danger') }}
+        </div>
+    @endif
     <div class="container-fluid pt-4 px-4">
         <div class="row">
             <div class="col-4">
@@ -13,7 +23,10 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">Brand Name</label>
-                                <input class="form-control" type="text" name="name" id="name">
+                                <input class="form-control" type="text" name="name" id="name" required>
+                                @error('name')
+                                    <small class="form-text text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <br>
 

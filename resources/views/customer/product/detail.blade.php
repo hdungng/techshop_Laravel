@@ -1,6 +1,7 @@
 @extends('layouts.customer')
 
 @section('content')
+
     <!-- BREADCRUMB -->
     <div id="breadcrumb" class="section">
         <!-- container -->
@@ -70,17 +71,6 @@
                             <li>Category:</li>
                             <li><a href="#">{{ $product->cat_name }}</a></li>
                         </ul>
-                        <div class="product-links">
-                            <h4>Ảnh liên quan</h4>
-                            @php
-                                $images_list = explode('|', $images->url);
-                            @endphp
-                            @foreach ($images_list as $image)
-                                <div style="display: inline-block;">
-                                    <img style="width: 150px; height: 100px;" src="{{ url($image) }}" alt="">
-                                </div>
-                            @endforeach
-                        </div>
                     </div>
                 </div>
             </div>
@@ -92,21 +82,22 @@
             <div id="product-tab">
                 <!-- product tab nav -->
                 <ul class="tab-nav">
-                    <li class="active"><a data-toggle="tab" href="#tab1">Detail</a></li>
+                    <li class="active"><a data-toggle="tab" href="#tab1">DETAIL</a></li>
+                    <div id="tab1" class="tab-pane fade in">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <br>
+                                    {!! $product->detail !!}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </ul>
                 <!-- /product tab nav -->
 
                 <!-- product tab content -->
                 <!-- tab1  -->
-                <div id="tab1" class="tab-pane fade in">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p>
-                                {!! $product->detail !!}
-                            </p>
-                        </div>
-                    </div>
-                </div>
                 <!-- /tab1  -->
             </div>
             <!-- /product tab content  -->

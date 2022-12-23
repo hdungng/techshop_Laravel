@@ -8,14 +8,19 @@
                     <div class="alert alert-success">
                         {{ session('status') }}
                     </div>
+                    @if (session('status-danger'))
+                        <div class="alert alert-danger">
+                            {{ session('status-danger') }}
+                        </div>
+                    @endif
                 @endif
                 <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">ADD A USER</h6>
+                    <h6 class="mb-4">ADD AN ADMIN</h6>
                     <form action="{{ route('add_user') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="name">Full Name</label>
-                            <input class="form-control" type="text" name="name" id="name">
+                            <input class="form-control" type="text" name="name" id="name" value="{{ old('name')}}">
                             @error('name')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -23,7 +28,7 @@
                         <br>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input class="form-control" type="email" name="email" id="email">
+                            <input class="form-control" type="email" name="email" id="email" value="{{ old('email')}}">
                             @error('email')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -47,7 +52,8 @@
                         <br>
                         <div class="form-group">
                             <label for="password_confirmation">Password Confimred</label>
-                            <input class="form-control" type="password" name="password_confirmation" id="password_confirmation">
+                            <input class="form-control" type="password" name="password_confirmation"
+                                id="password_confirmation">
                             @error('password_confirmation')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror

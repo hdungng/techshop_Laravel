@@ -4,9 +4,9 @@
     <div id="content" class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-12">
-                @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
+                @if (session('status-danger'))
+                    <div class="alert alert-danger">
+                        {{ session('status-danger') }}
                     </div>
                 @endif
                 <div class="bg-light rounded h-100 p-4">
@@ -76,8 +76,16 @@
                         <br>
 
                         <div class="form-group">
-                            <label for="brand_id">Category</label>
-                            {{ Form::select('cat_id', $list_cats, $product->cat_id, ['class' => 'form-control']) }}
+                            <label for="cat_id">Category</label>
+                            <select name="cat_id" id="cat_id" class='form-control'>
+                                @foreach ($list_cats as $cat)
+                                    @if ($cat->id == $product->cat_id)
+                                        <option value="{{ $product->cat_id }}" selected>{{ $cat->name }}</option>
+                                    @else
+                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                             @error('cat_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -85,10 +93,16 @@
                         <br>
 
                         <div class="form-group">
-                            <label for="cat_id">Brand</label>
-
-                            {{ Form::select('brand_id', $list_brands, $product->brand_id, ['class' => 'form-control']) }}
-
+                            <label for="brand_id">Brand</label>
+                            <select name="brand_id" id="brand_id" class='form-control'>
+                                @foreach ($list_brands as $brand)
+                                    @if ($brand->id == $product->brand_id)
+                                        <option value="{{ $product->brand_id }}" selected>{{ $brand->name }}</option>
+                                    @else
+                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                             @error('brand_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -115,7 +129,7 @@
                         <br>
                         <input type="submit" class="btn btn-primary" value="Cập nhật">
 
-                        <a href="{{ route('add_image_product', $product->id) }}">Add product's images</a>
+                        {{-- <a href="{{ route('add_image_product', $product->id) }}">Add product's images</a> --}}
                     </form>
                 </div>
             </div>

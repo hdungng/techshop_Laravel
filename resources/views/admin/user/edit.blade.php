@@ -9,6 +9,11 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @if (session('status-danger'))
+                    <div class="alert alert-danger">
+                        {{ session('status-danger') }}
+                    </div>
+                @endif
                 <div class="bg-light rounded h-100 p-4">
                     <h6 class="mb-4">EDIT A USER</h6>
                     <form action="{{ route('update_user', $user->id) }}" method="POST" enctype="multipart/form-data">
@@ -41,21 +46,10 @@
                             @enderror
                         </div>
                         <br>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input class="form-control" type="password" name="password" id="password">
-                            @error('password')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+
+                        <a href="{{ url('admin/user/reset-password', $user->id) }}">Change password</a>
+
                         <br>
-                        <div class="form-group">
-                            <label for="password-confirm">Password Confimred</label>
-                            <input class="form-control" type="password" name="password-confirm" id="password-confirm">
-                            @error('password-cofirm')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
                         <br>
                         <input type="submit" class="btn btn-primary" name="btn-update" value="Update a User">
                     </form>

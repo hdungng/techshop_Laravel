@@ -11,7 +11,7 @@
                 <!-- section title -->
                 <div class="col-md-12">
                     <div class="section-title">
-                        <h3 class="title">TABLETS</h3>
+                        <h3 class="title">LAPTOPS</h3>
                     </div>
                 </div>
                 <!-- /section title -->
@@ -24,27 +24,28 @@
                             <div id="tab1" class="tab-pane active">
                                 <div class="products-slick" data-nav="#slick-nav-1">
                                     <!-- product -->
-                                    @for ($i = 0; $i <= 4; $i++)
+                                    @foreach ($laptops as $laptop)
                                         <div class="product">
                                             <div class="product-img">
                                                 <br>
-                                                <img src="{{ $tablets[$i]->thumbnail }}" alt="">
+                                                <img src="{{ $laptop->thumbnail }}" alt="">
                                             </div>
                                             <div class="product-body">
-                                                <p class="product-category">{{ $tablets[$i]->cat_name }}</p>
+                                                <p class="product-category">{{ $laptop->cat_name }}</p>
                                                 <div class="product-name">
-                                                    <h3 class="product-name"><a href="{{route('detail', $tablets[$i]->id)}}">{{ $tablets[$i]->name }}</a>
+                                                    <h3 class="product-name"><a
+                                                            href="{{ route('detail', $laptop->id) }}">{{ $laptop->name }}</a>
                                                 </div>
                                                 </h3>
                                                 <h4 class="product-price">
-                                                    {{ number_format($tablets[$i]->price, 0, ',', '.') }}đ</h4>
+                                                    {{ number_format($laptop->price, 0, ',', '.') }}đ</h4>
                                             </div>
                                             <div class="add-to-cart">
                                                 <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> thêm giỏ
                                                     hàng</button>
                                             </div>
                                         </div>
-                                    @endfor
+                                    @endforeach
                                     <!-- /product -->
 
                                 </div>
@@ -131,28 +132,27 @@
                             <div id="tab2" class="tab-pane fade in active">
                                 <div class="products-slick" data-nav="#slick-nav-2">
                                     <!-- product -->
-                                    @for ($i = 0; $i <= 20; $i++)
-                                        @if ($mobiles[$i]->price > 20000000)
-                                            <div class="product">
-                                                <div class="product-img">
-                                                    <br>
-                                                    <img src="{{ $mobiles[$i]->thumbnail }}" alt="">
-                                                </div>
-                                                <div class="product-body">
-                                                    <p class="product-category">{{ $mobiles[$i]->cat_name }}</p>
-                                                    <h3 class="product-name"><a href="{{route('detail', $mobiles[$i]->id)}}">{{ $mobiles[$i]->name }}</a>
-                                                    </h3>
-                                                    <h4 class="product-price">
-                                                        {{ number_format($mobiles[$i]->price, 0, ',', '.') }}đ</h4>
-                                                </div>
-                                                <div class="add-to-cart">
-                                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> thêm
-                                                        giỏ
-                                                        hàng</button>
-                                                </div>
+                                    @foreach ($mobiles as $mobile)
+                                        <div class="product">
+                                            <div class="product-img">
+                                                <br>
+                                                <img src="{{ $mobile->thumbnail }}" alt="">
                                             </div>
-                                        @endif
-                                    @endfor
+                                            <div class="product-body">
+                                                <p class="product-category">{{ $mobile->cat_name }}</p>
+                                                <h3 class="product-name"><a
+                                                        href="{{ route('detail', $mobile->id) }}">{{ $mobile->name }}</a>
+                                                </h3>
+                                                <h4 class="product-price">
+                                                    {{ number_format($mobile->price, 0, ',', '.') }}đ</h4>
+                                            </div>
+                                            <div class="add-to-cart">
+                                                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> thêm
+                                                    giỏ
+                                                    hàng</button>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                     <!-- /product -->
 
                                 </div>
@@ -188,34 +188,42 @@
                         <div>
                             <!-- product widget -->
                             @for ($i = 0; $i <= 2; $i++)
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="{{ $mobiles[$i]->thumbnail }}" alt="">
+                                @if (!empty($mobiles[$i]))
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="{{ $mobiles[$i]->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ $mobiles[$i]->cat_name }}</p>
+                                            <h3 class="product-name"><a
+                                                    href="{{ route('detail', $mobiles[$i]->id) }}">{{ $mobiles[$i]->name }}</a>
+                                            </h3>
+                                            <h4 class="product-price">
+                                                {{ number_format($mobiles[$i]->price, 0, ',', '.') }}đ</h4>
+                                        </div>
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">{{ $mobiles[$i]->cat_name }}</p>
-                                        <h3 class="product-name"><a href="{{route('detail', $mobiles[$i]->id)}}">{{ $mobiles[$i]->name }}</a></h3>
-                                        <h4 class="product-price">
-                                            {{ number_format($mobiles[$i]->price, 0, ',', '.') }}đ</h4>
-                                    </div>
-                                </div>
+                                @endif
                             @endfor
                         </div>
 
                         <div>
                             <!-- product widget -->
                             @for ($i = 3; $i <= 5; $i++)
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="{{ $mobiles[$i]->thumbnail }}" alt="">
+                                @if (!empty($mobiles[$i]))
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="{{ $mobiles[$i]->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ $mobiles[$i]->cat_name }}</p>
+                                            <h3 class="product-name"><a
+                                                    href="{{ route('detail', $mobiles[$i]->id) }}">{{ $mobiles[$i]->name }}</a>
+                                            </h3>
+                                            <h4 class="product-price">
+                                                {{ number_format($mobiles[$i]->price, 0, ',', '.') }}đ</h4>
+                                        </div>
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">{{ $mobiles[$i]->cat_name }}</p>
-                                        <h3 class="product-name"><a href="{{route('detail', $mobiles[$i]->id)}}">{{ $mobiles[$i]->name }}</a></h3>
-                                        <h4 class="product-price">
-                                            {{ number_format($mobiles[$i]->price, 0, ',', '.') }}đ</h4>
-                                    </div>
-                                </div>
+                                @endif
                             @endfor
                         </div>
                     </div>
@@ -233,18 +241,23 @@
                         <div>
                             <!-- product widget -->
                             <div class="product-widget">
+
                                 @for ($i = 0; $i <= 2; $i++)
-                                    <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="{{ $laptops[$i]->thumbnail }}" alt="">
+                                    @if (!empty($laptops[$i]))
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="{{ $laptops[$i]->thumbnail }}" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <p class="product-category">{{ $laptops[$i]->cat_name }}</p>
+                                                <h3 class="product-name"><a
+                                                        href="{{ route('detail', $laptops[$i]->id) }}">{{ $laptops[$i]->name }}</a>
+                                                </h3>
+                                                <h4 class="product-price">
+                                                    {{ number_format($laptops[$i]->price, 0, ',', '.') }}đ</h4>
+                                            </div>
                                         </div>
-                                        <div class="product-body">
-                                            <p class="product-category">{{ $laptops[$i]->cat_name }}</p>
-                                            <h3 class="product-name"><a href="{{route('detail', $laptops[$i]->id)}}">{{ $laptops[$i]->name }}</a></h3>
-                                            <h4 class="product-price">
-                                                {{ number_format($laptops[$i]->price, 0, ',', '.') }}đ</h4>
-                                        </div>
-                                    </div>
+                                    @endif
                                 @endfor
                             </div>
                         </div>
@@ -253,17 +266,21 @@
                             <!-- product widget -->
                             <div class="product-widget">
                                 @for ($i = 3; $i <= 5; $i++)
-                                    <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="{{ $laptops[$i]->thumbnail }}" alt="">
+                                    @if (empty($laptop[$i]))
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="{{ $laptops[$i]->thumbnail }}" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <p class="product-category">{{ $laptops[$i]->cat_name }}</p>
+                                                <h3 class="product-name"><a
+                                                        href="{{ route('detail', $laptops[$i]->id) }}">{{ $laptops[$i]->name }}</a>
+                                                </h3>
+                                                <h4 class="product-price">
+                                                    {{ number_format($laptops[$i]->price, 0, ',', '.') }}đ</h4>
+                                            </div>
                                         </div>
-                                        <div class="product-body">
-                                            <p class="product-category">{{ $laptops[$i]->cat_name }}</p>
-                                            <h3 class="product-name"><a href="{{route('detail', $laptops[$i]->id)}}">{{ $laptops[$i]->name }}</a></h3>
-                                            <h4 class="product-price">
-                                                {{ number_format($laptops[$i]->price, 0, ',', '.') }}đ</h4>
-                                        </div>
-                                    </div>
+                                    @endif
                                 @endfor
                                 <!-- product widget -->
                             </div>
@@ -284,17 +301,21 @@
                     <div class="products-widget-slick" data-nav="#slick-nav-5">
                         <div>
                             @for ($i = 0; $i <= 2; $i++)
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="{{ $tablets[$i]->thumbnail }}" alt="">
+                                @if (!empty($tablets[$i]))
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="{{ $tablets[$i]->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ $tablets[$i]->cat_name }}</p>
+                                            <h3 class="product-name"><a
+                                                    href="{{ route('detail', $tablets[$i]->id) }}">{{ $tablets[$i]->name }}</a>
+                                            </h3>
+                                            <h4 class="product-price">
+                                                {{ number_format($tablets[$i]->price, 0, ',', '.') }}đ</h4>
+                                        </div>
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">{{ $tablets[$i]->cat_name }}</p>
-                                        <h3 class="product-name"><a href="{{route('detail', $tablets[$i]->id)}}">{{ $tablets[$i]->name }}</a></h3>
-                                        <h4 class="product-price">
-                                            {{ number_format($tablets[$i]->price, 0, ',', '.') }}đ</h4>
-                                    </div>
-                                </div>
+                                @endif
                             @endfor
 
                         </div>
@@ -302,17 +323,21 @@
                         <div>
                             <!-- product widget -->
                             @for ($i = 3; $i <= 5; $i++)
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="{{ $tablets[$i]->thumbnail }}" alt="">
+                                @if (!empty($tablets[$i]))
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="{{ $tablets[$i]->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ $tablets[$i]->cat_name }}</p>
+                                            <h3 class="product-name"><a
+                                                    href="{{ route('detail', $tablets[$i]->id) }}">{{ $tablets[$i]->name }}</a>
+                                            </h3>
+                                            <h4 class="product-price">
+                                                {{ number_format($tablets[$i]->price, 0, ',', '.') }}đ</h4>
+                                        </div>
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">{{ $tablets[$i]->cat_name }}</p>
-                                        <h3 class="product-name"><a href="{{route('detail', $tablets[$i]->id)}}">{{ $tablets[$i]->name }}</a></h3>
-                                        <h4 class="product-price">
-                                            {{ number_format($tablets[$i]->price, 0, ',', '.') }}đ</h4>
-                                    </div>
-                                </div>
+                                @endif
                             @endfor
                         </div>
                     </div>
@@ -324,5 +349,4 @@
         <!-- /container -->
     </div>
     <!-- /SECTION -->
-
 @endsection
